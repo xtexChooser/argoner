@@ -13,7 +13,6 @@ import kotlinx.serialization.hocon.Hocon
 import kotlinx.serialization.hocon.decodeFromConfig
 import mu.KotlinLogging
 import okio.Path.Companion.toPath
-import java.io.File
 
 object ArgonerServer {
 
@@ -53,18 +52,11 @@ object ArgonerServer {
             }
             it.enableHttpAllowedMethodsOnRoutes()
             if (!config.http.noBuiltinResources) {
-                val devResources = System.getenv("ARGONER_DEV_RESOURCES")
-                if (devMode && devResources != null) {
-                    devResources.split(File.pathSeparator).forEach { path ->
-                        it.addStaticFiles(path, Location.EXTERNAL)
-                    }
-                } else {
-                    it.addStaticFiles { static ->
-                        static.hostedPath = "/"
-                        static.directory = "META-INF/argoner/frontend"
-                        static.location = Location.CLASSPATH
-                        static.precompress = config.http.precompressResources
-                    }
+                it.addStaticFiles { static ->
+                    static.hostedPath = "/"
+                    static.directory = "META-INF/argoner/frontend"
+                    static.location = Location.CLASSPATH
+                    static.precompress = config.http.precompressResources && !config.devMode
                 }
             }
             if (config.http.extraResources != null)

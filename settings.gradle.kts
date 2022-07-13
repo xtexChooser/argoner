@@ -8,9 +8,4 @@ pluginManagement {
 
 rootProject.name = "argoner"
 
-include(":common")
-include(":server")
-include(":frontend")
-include(":client")
-include("protocol")
-include("common")
+include(":common", ":server", ":protocol", ":client", ":frontend")

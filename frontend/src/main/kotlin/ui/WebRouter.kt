@@ -9,8 +9,8 @@ import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
-fun WebRouter() {
-    androidx.compose.material3.Text("test")
+fun AppRouter() {
+    Text("test")
     HashRouter().route("/") {
         Routing()
     }
