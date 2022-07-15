@@ -7,6 +7,7 @@ plugins {
     kotlin("plugin.serialization") version "1.7.10" apply false
     id("org.jetbrains.compose") version "1.2.0-alpha01-dev745" apply false
     id("de.undercouch.download") version "5.1.0" apply false
+    id("com.github.johnrengelman.shadow") version "7.1.2" apply false
 }
 
 allprojects {
@@ -19,18 +20,16 @@ allprojects {
     }
 
     afterEvaluate {
-        if (pluginManager.hasPlugin("org.jetbrains.kotlin.jvm")) {
-            tasks.withType(KotlinJvmCompile::class.java) {
-                kotlinOptions {
-                    jvmTarget = "17"
-                }
+        tasks.withType(KotlinJvmCompile::class.java) {
+            kotlinOptions {
+                jvmTarget = "17"
             }
-            tasks.withType(KotlinJsCompile::class.java) {
-                kotlinOptions {
-                    moduleKind ="umd"
-                    sourceMap = true
-                    metaInfo = true
-                }
+        }
+        tasks.withType(KotlinJsCompile::class.java) {
+            kotlinOptions {
+                moduleKind = "umd"
+                sourceMap = true
+                metaInfo = true
             }
         }
     }

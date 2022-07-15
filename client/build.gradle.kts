@@ -3,17 +3,17 @@ plugins {
 }
 
 kotlin {
-    js("common", IR) {
+    js(IR) {
         browser { }
         nodejs { }
         binaries.library()
     }
-    js("browser", IR) {
-        browser { }
-        binaries.executable()
-    }
-    js("node", IR) {
-        nodejs { }
-        binaries.executable()
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                api(project(":common"))
+            }
+        }
     }
 }

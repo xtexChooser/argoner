@@ -9,7 +9,7 @@ data class HttpConfig(
     val port: Int = 8080,
     val generateETags: Boolean = false,
     val prefer405over404: Boolean = false,
-    val forceSsl: Boolean = false,
+    val enforceSsl: Boolean = false,
     val contextPath: String = "/",
     val useGzip: Boolean = true,
     val corsPolicy: Headers.CrossDomainPolicy = Headers.CrossDomainPolicy.MASTER_ONLY,
