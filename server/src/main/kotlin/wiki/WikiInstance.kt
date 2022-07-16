@@ -10,7 +10,7 @@ import okhttp3.OkHttpClient
 class WikiInstance(val config: WikiConfig) : ComponentContainer<WikiInstance>() {
 
     val id: WikiID get() = config.id
-    val installation = WikiInstallation(id = id, name = config.name, url = config.url, viewUrl = config.viewUrl)
+    val installation = WikiInstallation(id = id, name = config.name, url = config.url)
 
     val httpClient = OkHttpClient.Builder()
         .proxy(config.proxy?.toJavaProxy())

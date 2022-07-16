@@ -5,6 +5,7 @@ import argoner.common.content.issue.IssueID
 import argoner.common.content.wiki.PageRef
 import argoner.server.issue.db.IssueRecord
 import argoner.server.wiki.WikiInstance
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 
 class Issue(val wiki: WikiInstance, val record: IssueRecord) {
@@ -16,7 +17,6 @@ class Issue(val wiki: WikiInstance, val record: IssueRecord) {
     val type get() = record.type
     val details get() = record.details
     val firstFoundTime by lazy { Instant.fromEpochSeconds(record.firstFoundTime) }
-    val lastCheckedTime by lazy { Instant.fromEpochSeconds(record.lastCheckedTime) }
 
     override fun hashCode() = record.hashCode()
     override fun equals(other: Any?) = other is Issue && other.record == record
@@ -27,10 +27,11 @@ class Issue(val wiki: WikiInstance, val record: IssueRecord) {
     private fun describe() = DescribedIssue(
         uuid = uuid,
         page = pageRef,
+        pageUrl = wiki.config.url + "/wiki/" + pageID,
         source = source,
         summary = details.summarize(),
         firstFoundTime = firstFoundTime,
-        lastCheckedTime = lastCheckedTime,
+        lastCheckedTime = Clock.System.now(),
         descriptors = details.describe(),
     )
 

@@ -3,9 +3,10 @@ package argoner.frontend.web.ui
 import androidx.compose.runtime.Composable
 import app.softwork.routingcompose.HashRouter
 import app.softwork.routingcompose.NavLink
-import app.softwork.routingcompose.Router
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.attributes.name
+import org.jetbrains.compose.web.css.cssRem
+import org.jetbrains.compose.web.css.paddingTop
 import org.jetbrains.compose.web.dom.*
 
 @Composable
@@ -18,7 +19,7 @@ fun App() {
                     Span { Text("Argoner") }
                 }
             }
-            /*Div(attrs = { classes("collapsible") }) {
+            Div(attrs = { classes("collapsible") }) {
                 Input(type = InputType.Checkbox, attrs = {
                     id("menu-collapsible")
                     name("menu-collapsible")
@@ -28,13 +29,15 @@ fun App() {
                         Div(attrs = { classes("bar$i") }) { Text("-") }
                     }
                 }
-                Div(attrs = { classes("collapsible-body") }) {*/
+                Div(attrs = { classes("collapsible-body") }) {
                     Ul(attrs = { classes("inline") }) {
                         Li { NavLink("/about") { Text("About") } }
                     }
-                /*}
-            }*/
+                }
+            }
         }
-        AppRouter()
+        Div(attrs = { style { paddingTop(3.5.cssRem) } }) {
+            AppRouter()
+        }
     }
 }

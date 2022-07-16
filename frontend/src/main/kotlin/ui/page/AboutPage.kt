@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import argoner.client.endpoint.getServerInfo
 import argoner.common.endpoint.ServerInfo
 import argoner.frontend.web.FrontendClient
-import argoner.frontend.web.ui.components.ModalDialog
+import argoner.frontend.web.ui.components.papercss.ModalDialog
 import argoner.frontend.web.util.backOrHome
 import argoner.frontend.web.util.history
 import org.jetbrains.compose.web.css.Color

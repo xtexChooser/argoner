@@ -11,6 +11,7 @@ import kotlinx.serialization.Serializable
 data class DescribedIssue(
     val uuid: IssueID,
     val page: PageRef,
+    val pageUrl: String,
     val source: IssueSource,
     val summary: String,
     val firstFoundTime: Instant,

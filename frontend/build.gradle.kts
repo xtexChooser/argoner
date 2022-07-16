@@ -13,6 +13,9 @@ kotlin {
             testTask {
                 onlyIf { false }
             }
+            commonWebpackConfig {
+                sourceMaps = true
+            }
         }
         binaries.executable()
     }

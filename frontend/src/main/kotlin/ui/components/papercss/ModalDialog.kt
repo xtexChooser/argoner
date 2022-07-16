@@ -1,4 +1,4 @@
-package argoner.frontend.web.ui.components
+package argoner.frontend.web.ui.components.papercss
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State

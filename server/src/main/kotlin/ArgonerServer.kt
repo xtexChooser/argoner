@@ -1,8 +1,9 @@
 package argoner.server
 
+import argoner.common.content.wiki.WikiInstallation
 import argoner.server.config.ServerConfig
-import argoner.server.handler.ServerInfoHandler
-import argoner.server.issue.details.IssueDetails
+import argoner.server.handler.handleServerInfo
+import argoner.server.handler.wiki.handleListWiki
 import argoner.server.issue.details.registerIssueDetailsSerializer
 import argoner.server.module.TestMod
 import argoner.server.util.BuildConfig
@@ -10,20 +11,23 @@ import argoner.server.util.component.ComponentContainer
 import argoner.server.util.javalin.JsonMapper
 import com.typesafe.config.ConfigFactory
 import io.javalin.Javalin
+import io.javalin.apibuilder.ApiBuilder.get
+import io.javalin.apibuilder.ApiBuilder.path
 import io.javalin.core.compression.CompressionStrategy
 import io.javalin.core.util.Headers
 import io.javalin.core.util.RouteOverviewPlugin
 import io.javalin.http.staticfiles.Location
 import io.javalin.http.util.RedirectToLowercasePathPlugin
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.SetSerializer
 import kotlinx.serialization.hocon.Hocon
 import kotlinx.serialization.hocon.decodeFromConfig
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.contextual
 import mu.KotlinLogging
 import okio.Path.Companion.toPath
-import org.jetbrains.exposed.sql.Database
 
 object ArgonerServer : ComponentContainer<ArgonerServer>() {
 
@@ -40,6 +44,7 @@ object ArgonerServer : ComponentContainer<ArgonerServer>() {
         ignoreUnknownKeys = true
         serializersModule = SerializersModule {
             registerIssueDetailsSerializer()
+            contextual(ListSerializer(WikiInstallation.serializer()))
         }
     }
     val javalin = createJavalinServer()
@@ -88,7 +93,16 @@ object ArgonerServer : ComponentContainer<ArgonerServer>() {
         }
 
     private fun registerRoutes() {
-        javalin.get("/api/info", ServerInfoHandler)
+        javalin.routes {
+            path("api") {
+                get("info", ::handleServerInfo)
+                path("wiki") {
+                    get(::handleListWiki)
+                    path("{wiki}") {
+                    }
+                }
+            }
+        }
     }
 
 }

@@ -27,7 +27,6 @@ class IssueRecord(table: IssueRecords.Table, id: EntityID<UUID>) : KotlinxUUIDEn
             ArgonerServer.serializer.encodeToString(type.detailsSerializer as KSerializer<IssueDetails>, newValue)
     }
     var firstFoundTime by table.firstFoundTime
-    var lastCheckedTime by table.lastCheckedTime
 
     override fun hashCode() = id.hashCode()
     override fun equals(other: Any?) = other is IssueRecord && other.id == id

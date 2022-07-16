@@ -23,14 +23,11 @@ class IssueRecords(val wiki: WikiInstance, table: Table = Table(wiki)) :
     class Table(wiki: WikiInstance) : KotlinxUUIDTable(name = "${wiki.id}_issue_records", columnName = "uuid") {
 
         val page = varchar("page_id", 255)
-            .index("page_id", false)
         val issueSource = json<IssueSource>("source")
         val type = varchar("type", 64)
             .index("type", false)
         val details = jsonAsString("details")
         val firstFoundTime = long("first_found_time")
-            .clientDefault { Clock.System.now().epochSeconds }
-        val lastCheckedTime = long("last_checked_time")
             .clientDefault { Clock.System.now().epochSeconds }
 
         init {

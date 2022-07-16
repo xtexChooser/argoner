@@ -4,6 +4,7 @@ import argoner.common.content.desc.AnyDescriptor
 import argoner.common.content.desc.StringDesc
 import argoner.common.content.issue.source.BotIssueSource
 import argoner.common.util.Identifier
+import argoner.server.issue.Issue
 import argoner.server.issue.db.IssueRecords
 import argoner.server.issue.details.IssueDetails
 import argoner.server.wiki.Wikis
@@ -34,12 +35,20 @@ object TestMod : Module() {
                     details = TestDet("this is another test issue ${Clock.System.now().epochSeconds}")
                 }
             }
+            transaction {
+                println(it[IssueRecords].all())
+                println(it[IssueRecords].all().map { v -> Issue(it, v) })
+                println(it[IssueRecords].all().map { v -> Issue(it, v) }
+                    .map { i ->
+                        "${i.details} ${i.source} ${i.uuid} ${i.pageRef}"
+                    }.joinToString("\n"))
+            }
         }
     }
 
     @Serializable
     @SerialName("test:test")
-    class TestDet(val text: String) : IssueDetails() {
+    data class TestDet(val text: String) : IssueDetails() {
         override fun summarize(): String {
             return "Test Issue: $text"
         }
