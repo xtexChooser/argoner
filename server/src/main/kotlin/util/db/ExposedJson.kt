@@ -2,10 +2,8 @@
  * JSON and JSONB support for github.com/JetBrains/Exposed.
  *
  * Tested with
- * - github.com/impossibl/pgjdbc-ng
  * - github.com/pgjdbc/pgjdbc 42.2.x
  * - github.com/mysql/mysql-connector-j
- * - Oracle JDBC
  * - github.com/h2database/h2database
  *
  * Based on gist.github.com/qoomon/70bbbedc134fd2a149f1f2450667dc9d
@@ -17,12 +15,19 @@
 package argoner.server.util.db
 
 import argoner.server.ArgonerServer
+import com.mysql.cj.xdevapi.JsonParser
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
+import org.h2.value.ValueJson
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.Function
+import org.jetbrains.exposed.sql.vendors.H2Dialect
+import org.jetbrains.exposed.sql.vendors.MysqlDialect
+import org.jetbrains.exposed.sql.vendors.PostgreSQLDialect
+import org.jetbrains.exposed.sql.vendors.currentDialect
+import org.postgresql.util.PGobject
 
 open class JsonColumnType<T : Any>(
     val json: Json = ArgonerServer.serializer,
@@ -32,23 +37,41 @@ open class JsonColumnType<T : Any>(
 
     override fun sqlType(): String = type.name
 
-    override fun valueFromDB(value: Any) =
-        json.decodeFromString(serializer, super.valueFromDB(value).toString())
+    override fun valueFromDB(value: Any) = when (val v = super.valueFromDB(value)) {
+        is String -> json.decodeFromString(serializer, v)
+        is PGobject -> json.decodeFromString(serializer, v.value!!)
+        is com.mysql.cj.xdevapi.JsonValue -> json.decodeFromString(serializer, v.toFormattedString())
+        is ValueJson -> json.decodeFromString(serializer, v.string)
+        else -> v
+    }
+
+    override fun notNullValueToDB(value: Any): Any = when (currentDialect) {
+        is PostgreSQLDialect ->
+            PGobject().apply {
+                type = sqlType().lowercase()
+                setValue(nonNullValueToString(value))
+            }
+
+        is MysqlDialect -> JsonParser.parseDoc(nonNullValueToString(value))
+        is H2Dialect -> ValueJson.get(nonNullValueToString(value))
+        else -> error("Unsupported dialect: $currentDialect")
+    }
 
     @Suppress("UNCHECKED_CAST")
-    override fun notNullValueToDB(value: Any) =
-        super.nonNullValueToString(json.encodeToString(serializer, value as T))
-
-    @Suppress("UNCHECKED_CAST")
-    override fun nonNullValueToString(value: Any)=
-        super.nonNullValueToString(json.encodeToString(serializer, value as T))
+    override fun nonNullValueToString(value: Any) = json.encodeToString(serializer, value as T)
 
     override fun valueToString(value: Any?): String = when (value) {
-        is Iterable<*> -> notNullValueToDB(value)
+        is Iterable<*> -> nonNullValueToString(value)
         else -> super.valueToString(value)
     }
 
     enum class Type {
+
+        JSON, JSONB
+
+    }
+
+    enum class DataBaseType {
 
         JSON, JSONB
 
