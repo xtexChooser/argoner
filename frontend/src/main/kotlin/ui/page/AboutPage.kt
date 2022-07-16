@@ -1,18 +1,17 @@
 package argoner.frontend.web.ui.page
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import argoner.client.endpoint.getServerInfo
-import argoner.common.endpoint.ServerInfo
 import argoner.frontend.web.FrontendClient
 import argoner.frontend.web.ui.components.papercss.ModalDialog
+import argoner.frontend.web.ui.components.util.LoadingData
 import argoner.frontend.web.util.backOrHome
 import argoner.frontend.web.util.history
 import org.jetbrains.compose.web.css.Color
 import org.jetbrains.compose.web.css.color
 import org.jetbrains.compose.web.css.fontStyle
 import org.jetbrains.compose.web.dom.*
-
-private val KEY_LOADING_EXTRA_SERVER_INFO = Any()
 
 @Composable
 fun AboutPage() {
@@ -23,14 +22,7 @@ fun AboutPage() {
         subtitle = { Text("The tool for everyone.") },
         onClose = { history.backOrHome() }
     ) {
-        var serverInfo by remember { mutableStateOf<ServerInfo?>(null) }
-        if (serverInfo == null) {
-            LaunchedEffect(KEY_LOADING_EXTRA_SERVER_INFO) {
-                serverInfo = FrontendClient.getServerInfo()
-            }
-            Text("Loading more server information...")
-        } else {
-            val info = serverInfo!!
+        LoadingData({ FrontendClient.getServerInfo() }) { info ->
             Table {
                 Tbody {
                     Tr {

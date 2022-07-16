@@ -13,6 +13,13 @@ import org.jetbrains.compose.web.dom.Text
 fun RouteBuilder.AppRouter() {
     route("/") { IndexPage() }
     route("/about") { AboutPage() }
+    route("/wiki/") {
+        string { wikiID ->
+            noMatch {
+
+            }
+        }
+    }
     noMatch {
         P {
             Text("Router Not Found")
