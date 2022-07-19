@@ -6,7 +6,7 @@ import argoner.common.content.issue.DescribedIssue
 import argoner.common.content.wiki.WikiID
 
 suspend fun ArgonerClient.countIssues(wikiID: WikiID) =
-    call<Long>("v1/wiki/$wikiID/issues/count")
+    call<Int>("v1/wiki/$wikiID/issues/count")
 
 suspend fun ArgonerClient.listIssues(wikiID: WikiID, offset: Int? = null, count: Int? = null) =
     call<List<DescribedIssue>>(

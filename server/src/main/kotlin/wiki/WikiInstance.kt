@@ -24,7 +24,7 @@ class WikiInstance(val config: WikiConfig) : ComponentContainer<WikiInstance>() 
 
     val apiBaseUrl = config.apiUrl.toHttpUrl()
 
-    fun countIssues(filter: Op<Boolean>? = null) = transaction { get(IssueRecords).count(filter) }
+    fun countIssues(filter: Op<Boolean>? = null) = transaction { get(IssueRecords).count(filter).toInt() }
     fun listIssues(filter: Op<Boolean>? = null) =
         transaction {
             if (filter != null) {

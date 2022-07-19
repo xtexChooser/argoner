@@ -6,7 +6,6 @@ import kotlinx.coroutines.await
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import org.w3c.dom.url.URL
 import org.w3c.fetch.*
 import kotlin.reflect.KType
 
@@ -23,8 +22,8 @@ actual class ArgonerClient actual constructor(actual val baseUrl: String, actual
                 append(baseUrl)
                 append(path)
                 if (queryParams.isNotEmpty()) {
-                    append("?")
-                    queryParams.forEach { (key, value) ->
+                    queryParams.entries.forEachIndexed { index, (key, value) ->
+                        append(if (index == 0) "?" else "&")
                         append(key)
                         append("=")
                         append(encodeURIComponent(value))
