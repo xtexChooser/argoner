@@ -2,20 +2,23 @@ package argoner.server
 
 import argoner.server.config.ServerConfig
 import argoner.server.handler.handleServerInfo
+import argoner.server.handler.wiki.handleIssuesCount
+import argoner.server.handler.wiki.handleIssuesList
 import argoner.server.handler.wiki.handleListWiki
 import argoner.server.handler.wiki.handleWikiInfo
 import argoner.server.issue.details.registerIssueDetailsSerializer
 import argoner.server.module.TestMod
 import argoner.server.util.BuildConfig
+import argoner.server.util.NotFoundException
 import argoner.server.util.component.ComponentContainer
 import argoner.server.util.javalin.JsonMapper
 import com.typesafe.config.ConfigFactory
 import io.javalin.Javalin
-import io.javalin.apibuilder.ApiBuilder.get
-import io.javalin.apibuilder.ApiBuilder.path
+import io.javalin.apibuilder.ApiBuilder.*
 import io.javalin.core.compression.CompressionStrategy
 import io.javalin.core.util.Headers
 import io.javalin.core.util.RouteOverviewPlugin
+import io.javalin.http.HttpCode
 import io.javalin.http.staticfiles.Location
 import io.javalin.http.util.RedirectToLowercasePathPlugin
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -89,13 +92,25 @@ object ArgonerServer : ComponentContainer<ArgonerServer>() {
         }
 
     private fun registerRoutes() {
-        javalin.routes {
-            path("api") {
-                get("info", ::handleServerInfo)
-                path("wiki") {
-                    get(::handleListWiki)
-                    path("{wiki}") {
-                        get(::handleWikiInfo)
+        javalin.apply {
+            exception(NotFoundException::class.java) { e, ctx ->
+                ctx.status(HttpCode.NOT_FOUND)
+                    .result(e.message!!)
+            }
+            routes {
+                path("api") {
+                    path("v1") {
+                        path("info") { get(::handleServerInfo) }
+                        path("wiki") {
+                            get(::handleListWiki)
+                            path("{wiki}") {
+                                get(::handleWikiInfo)
+                                path("issues") {
+                                    path("count") { get(::handleIssuesCount) }
+                                    get(::handleIssuesList)
+                                }
+                            }
+                        }
                     }
                 }
             }

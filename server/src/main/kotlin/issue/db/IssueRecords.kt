@@ -1,6 +1,6 @@
 package argoner.server.issue.db
 
-import argoner.common.content.issue.source.IssueSource
+import argoner.common.content.issue.IssueSource
 import argoner.common.util.Identifier
 import argoner.server.util.component.Component
 import argoner.server.util.component.ComponentType
@@ -10,7 +10,6 @@ import argoner.server.wiki.WikiInstance
 import kotlinx.datetime.Clock
 import kotlinx.uuid.exposed.KotlinxUUIDEntityClass
 import kotlinx.uuid.exposed.KotlinxUUIDTable
-import mu.KotlinLogging
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 

@@ -1,7 +1,6 @@
 package argoner.common.content.issue
 
 import argoner.common.content.desc.AnyDescriptor
-import argoner.common.content.issue.source.IssueSource
 import argoner.common.content.wiki.PageRef
 import argoner.common.util.Identifier
 import kotlinx.datetime.Instant
@@ -13,6 +12,7 @@ data class DescribedIssue(
     val page: PageRef,
     val pageUrl: String,
     val source: IssueSource,
+    val title: String,
     val summary: String,
     val firstFoundTime: Instant,
     val lastCheckedTime: Instant,

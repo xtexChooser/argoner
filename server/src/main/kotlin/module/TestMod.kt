@@ -2,7 +2,7 @@ package argoner.server.module
 
 import argoner.common.content.desc.AnyDescriptor
 import argoner.common.content.desc.StringDesc
-import argoner.common.content.issue.source.BotIssueSource
+import argoner.common.content.issue.BotIssueSource
 import argoner.common.util.Identifier
 import argoner.server.issue.Issue
 import argoner.server.issue.db.IssueRecords
@@ -19,29 +19,21 @@ object TestMod : Module() {
         get() = "test"
 
     override fun ContentRegisterer.register() {
-        val testType = IssueType(Identifier("test"), TestDet::class)
+        val testType = IssueType(Identifier("test"), TestDet::class, "Test Issue Type")
         Wikis.wikis.values.forEach {
             transaction {
                 it[IssueRecords].new {
                     page = "Minecraft Wiki"
                     source = BotIssueSource(identity("test_scanner"))
-                    type =testType
+                    type = testType
                     details = TestDet("this is a test issue ${Clock.System.now().epochSeconds}")
                 }
                 it[IssueRecords].new {
                     page = "ANB"
                     source = BotIssueSource(identity("test_scanner"))
-                    type =testType
+                    type = testType
                     details = TestDet("this is another test issue ${Clock.System.now().epochSeconds}")
                 }
-            }
-            transaction {
-                println(it[IssueRecords].all())
-                println(it[IssueRecords].all().map { v -> Issue(it, v) })
-                println(it[IssueRecords].all().map { v -> Issue(it, v) }
-                    .map { i ->
-                        "${i.details} ${i.source} ${i.uuid} ${i.pageRef}"
-                    }.joinToString("\n"))
             }
         }
     }

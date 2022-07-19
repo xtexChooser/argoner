@@ -3,28 +3,47 @@ package argoner.frontend.web.ui.components.issue
 import androidx.compose.runtime.Composable
 import argoner.common.content.issue.DescribedIssue
 import argoner.frontend.web.ui.components.desc.DescriptorsInfo
+import org.jetbrains.compose.web.attributes.ATarget
+import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.P
+import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
 fun DescribedIssueInfo(issue: DescribedIssue) {
-    Div(attrs = { classes("row") }) {
-        Div(attrs = { classes("col-4", "col") }) {
-            A(href = issue.pageUrl, attrs = { attr("popover-top", issue.pageUrl) }) { Text(issue.page.page) }
-        }
-        Div(attrs = { classes("col-4", "col") }) {
-            P(attrs = { attr("popover-top", "Issue UUID") }) { Text(issue.uuid.toString()) }
-        }
-        Div(attrs = { classes("col-4", "col") }) {
-            P(attrs = { attr("popover-top", "Issue Discoverer") }) { Text(issue.source.toString()) }
-        }
+    Div {
+        A(href = issue.pageUrl, attrs = {
+            classes("paper-btn", "btn-secondary", "btn-small")
+            target(ATarget.Blank)
+        }) { Text(issue.page.page) }
+        Span(attrs = { classes("margin-left-small") }) { Text(issue.summary) }
     }
-    P { Text(issue.summary) }
     DescriptorsInfo(issue.descriptors)
-    Div(attrs = { classes("row") }) {
-        Div(attrs = { classes("col-6", "col") }) { P { Text("First Found at ${issue.firstFoundTime}") } }
-        Div(attrs = { classes("col-6", "col") }) { P { Text("Last Checked at ${issue.lastCheckedTime}") } }
+    Div(attrs = { classes("margin-top", "margin-bottom-small", "text-muted") }) {
+        Div(attrs = { classes("row") }) {
+            Div(attrs = { classes("col-5", "col", "padding-none") }) {
+                Span {
+                    Text("Issue UUID: ${issue.uuid}")
+                }
+            }
+            Div(attrs = { classes("col-5", "col", "padding-none") }) {
+                Span {
+                    Text("Source: ${issue.source}")
+                }
+            }
+        }
+        Div(attrs = { classes("row") }) {
+            Div(attrs = { classes("col-5", "col", "padding-none") }) {
+                Span {
+                    Text("First Found: ${issue.firstFoundTime}")
+                }
+            }
+            Div(attrs = { classes("col-5", "col", "padding-none") }) {
+                Span {
+                    Text("Last Checked: ${issue.lastCheckedTime}")
+                }
+            }
+        }
     }
 }

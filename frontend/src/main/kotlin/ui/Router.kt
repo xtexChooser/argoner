@@ -5,7 +5,8 @@ import app.softwork.routingcompose.RouteBuilder
 import app.softwork.routingcompose.Routing
 import argoner.frontend.web.ui.page.AboutPage
 import argoner.frontend.web.ui.page.IndexPage
-import org.jetbrains.compose.web.dom.P
+import argoner.frontend.web.ui.page.wiki.WikiIndexPage
+import argoner.frontend.web.ui.page.wiki.WikiIssuesPage
 import org.jetbrains.compose.web.dom.Text
 
 @Routing
@@ -15,14 +16,16 @@ fun RouteBuilder.AppRouter() {
     route("/about") { AboutPage() }
     route("/wiki/") {
         string { wikiID ->
-            noMatch {
+            route("/") { WikiIndexPage(wikiID) }
+            route("/issues") { WikiIssuesPage(wikiID) }
+            noMatch()
+        }
+    }
+    noMatch()
+}
 
-            }
-        }
-    }
-    noMatch {
-        P {
-            Text("Router Not Found")
-        }
-    }
+@Routing
+@Composable
+private fun RouteBuilder.noMatch() {
+    noMatch { Text("Router Not Found") }
 }

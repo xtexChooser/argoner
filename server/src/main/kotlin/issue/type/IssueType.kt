@@ -14,6 +14,7 @@ class IssueType<T : IssueDetails>(
     val id: Identifier,
     val detailsType: KClass<T>,
     val detailsSerializer: KSerializer<T> = @OptIn(InternalSerializationApi::class) detailsType.serializer(),
+    val name: String,
 ) {
 
     companion object List : ArrayList<IssueType<*>>() {

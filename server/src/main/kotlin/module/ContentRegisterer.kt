@@ -24,12 +24,12 @@ class ContentRegisterer(private val module: Module) {
         }
     }
 
-    fun <T : IssueDetails> IssueType(id: Identifier, detailsType: KClass<T>) =
-        IssueType(module, id, detailsType).also { IssueType += it }
+    fun <T : IssueDetails> IssueType(id: Identifier, detailsType: KClass<T>, name: String) =
+        IssueType(module, id, detailsType, name = name).also { IssueType += it }
 
-    fun <T : IssueDetails> IssueType(detailsType: KClass<T>) =
+    fun <T : IssueDetails> IssueType(detailsType: KClass<T>, name: String) =
         @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
-        IssueType(Identifier(detailsType.serializer().descriptor.serialName), detailsType)
+        IssueType(Identifier(detailsType.serializer().descriptor.serialName), detailsType, name)
 
     fun Identifier(path: String) = module.identity(path)
 

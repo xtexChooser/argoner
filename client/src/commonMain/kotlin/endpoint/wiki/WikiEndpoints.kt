@@ -5,6 +5,6 @@ import argoner.client.call
 import argoner.common.content.wiki.WikiID
 import argoner.common.content.wiki.WikiInstallation
 
-suspend fun ArgonerClient.listWikis() = call<Set<WikiInstallation>>("wiki")
+suspend fun ArgonerClient.listWikis() = call<List<WikiInstallation>>("v1/wiki")
 
-suspend fun ArgonerClient.getWikiInfo(wikiID: WikiID) = call<WikiInstallation>("wiki/$wikiID")
+suspend fun ArgonerClient.getWikiInfo(wikiID: WikiID) = call<WikiInstallation>("v1/wiki/$wikiID")

@@ -7,7 +7,7 @@ import org.jetbrains.compose.web.dom.Text
 import kotlin.math.min
 
 @Composable
-inline fun <T> LoadingData(crossinline loader: suspend () -> T, content: @Composable (T) -> Unit) {
+fun <T> LoadingData(loader: suspend () -> T, content: @Composable (T) -> Unit) {
     val keyLoadingEffect by remember { derivedStateOf { Any() } }
     val keyLoadingData by remember { derivedStateOf { Any() } }
     var data by remember { mutableStateOf<T?>(null) }

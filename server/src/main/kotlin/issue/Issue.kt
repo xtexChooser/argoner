@@ -29,6 +29,7 @@ class Issue(val wiki: WikiInstance, val record: IssueRecord) {
         page = pageRef,
         pageUrl = wiki.config.url + "/wiki/" + pageID,
         source = source,
+        title = type.name,
         summary = details.summarize(),
         firstFoundTime = firstFoundTime,
         lastCheckedTime = Clock.System.now(),

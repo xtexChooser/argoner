@@ -16,10 +16,16 @@ expect class ArgonerClient(
         path: String,
         method: String = "GET",
         data: Any? = null,
+        queryParams: Map<String, String> = emptyMap(),
         responseType: KType
     ): T
 
 }
 
-suspend inline fun <reified T : Any> ArgonerClient.call(path: String, method: String = "GET", data: Any? = null) =
-    call<T>(path, method, data, typeOf<T>())
+suspend inline fun <reified T : Any> ArgonerClient.call(
+    path: String,
+    method: String = "GET",
+    data: Any? = null,
+    queryParams: Map<String, String> = emptyMap()
+) =
+    call<T>(path, method, data, queryParams, typeOf<T>())

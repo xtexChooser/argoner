@@ -6,7 +6,7 @@ import app.softwork.routingcompose.NavLink
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.attributes.name
 import org.jetbrains.compose.web.css.cssRem
-import org.jetbrains.compose.web.css.paddingTop
+import org.jetbrains.compose.web.css.padding
 import org.jetbrains.compose.web.dom.*
 
 @Composable
@@ -36,7 +36,7 @@ fun App() {
                 }
             }
         }
-        Div(attrs = { style { paddingTop(3.5.cssRem) } }) {
+        Div(attrs = { style { padding(3.5.cssRem) } }) {
             AppRouter()
         }
     }

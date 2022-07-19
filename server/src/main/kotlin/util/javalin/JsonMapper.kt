@@ -2,7 +2,6 @@ package argoner.server.util.javalin
 
 import io.javalin.plugin.json.JsonMapper
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.serializer

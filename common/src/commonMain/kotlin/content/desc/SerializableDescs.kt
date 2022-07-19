@@ -1,6 +1,6 @@
 package argoner.common.content.desc
 
-import argoner.common.content.issue.source.IssueSource
+import argoner.common.content.issue.IssueSource
 import argoner.common.content.wiki.PageRef
 import argoner.common.content.wiki.WikiInstallation
 import kotlinx.serialization.SerialName
