@@ -7,13 +7,13 @@ import org.jetbrains.compose.web.dom.Text
 import kotlin.math.min
 
 @Composable
-fun <T> LoadingData(loader: suspend () -> T, content: @Composable (T) -> Unit) {
-    val keyLoadingEffect by remember { derivedStateOf { Any() } }
-    val keyLoadingData by remember { derivedStateOf { Any() } }
-    var data by remember { mutableStateOf<T?>(null) }
+fun <T> LoadingData(loader: suspend () -> T, key: Any? = null, content: @Composable (T) -> Unit) {
+    val keyLoadingEffect = remember { Any() }
+    val keyLoadingData = remember { Any() }
+    var data by remember(key) { mutableStateOf<T?>(null) }
     if (data == null) {
         var progress by remember { mutableStateOf(0.0) }
-        LaunchedEffect(keyLoadingEffect) {
+        LaunchedEffect(keyLoadingEffect, key) {
             while (progress < 99) {
                 progress++
                 delay(50)
@@ -23,7 +23,7 @@ fun <T> LoadingData(loader: suspend () -> T, content: @Composable (T) -> Unit) {
                 delay(50)
             }
         }
-        LaunchedEffect(keyLoadingData) {
+        LaunchedEffect(keyLoadingData, key) {
             data = loader()
         }
         Div(attrs = { classes("progress", "margin-bottom") }) {

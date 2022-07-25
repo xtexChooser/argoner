@@ -24,7 +24,7 @@ kotlin {
 dependencies {
     api(project(":client"))
     implementation(compose.web.core)
-    implementation("app.softwork:routing-compose:0.2.6")
+    implementation("app.softwork:routing-compose:0.2.7")
 }
 
 compose {

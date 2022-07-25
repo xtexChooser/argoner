@@ -14,7 +14,7 @@ import org.jetbrains.compose.web.dom.Text
 
 @Composable
 fun WikiIssuesList(wikiID: WikiID, offset: Int? = null, count: Int? = null) {
-    LoadingData({ FrontendClient.listIssues(wikiID, offset, count) }) { issues ->
+    LoadingData({ FrontendClient.listIssues(wikiID, offset, count) }, key = offset to count) { issues ->
         Div(attrs = {
             classes("row")
             style {

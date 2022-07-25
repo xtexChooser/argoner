@@ -20,15 +20,20 @@ fun PagedData(pageCount: Int, parameterName: String = "page", content: @Composab
 
     @Composable
     inline fun PageLink(page: Int, crossinline content: @Composable () -> Unit) {
-        NavLink(
-            router.currentPath
-                .copy(
-                    parameters = Parameters.from((router.currentPath.parameters?.map?.toMutableMap() ?: mutableMapOf())
-                        .also { it[parameterName] = listOf(page.toString()) })
-                )
-                .toString()
-        ) {
+        if (page == currentPage) {
             content()
+        } else {
+            NavLink(
+                router.currentPath
+                    .copy(
+                        parameters = Parameters.from((router.currentPath.parameters?.map?.toMutableMap()
+                            ?: mutableMapOf())
+                            .also { it[parameterName] = listOf(page.toString()) })
+                    )
+                    .toString()
+            ) {
+                content()
+            }
         }
     }
 
@@ -48,7 +53,7 @@ fun PagedData(pageCount: Int, parameterName: String = "page", content: @Composab
                 if (lastPage != null && lastPage != page - 1) {
                     Li { Text("...") }
                 }
-                Li { PageLink(page) { Text(page.toString()) } }
+                Li { PageLink(page) { Text("$page ") } }
                 lastPage = page
             }
         if (currentPage < pageCount) Li { PageLink(currentPage + 1) { Text("Next ->") } }
